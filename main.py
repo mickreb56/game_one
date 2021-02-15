@@ -1,33 +1,37 @@
+from math import *
+from array import *
+from random import *
+from time import *
+import threading
+vec = [0,0]
 
-from graphics import *
-
+def piCount():
+    for i in range(10000):
+        point = [randint(0,1000), randint(0,1000)]
+        
+        var = sqrt((point[0] - 500.0) ** 2 + (point[1] - 500.0) ** 2)
+        if(var <= 500.0):
+            vec[0] += 1
+        else:
+            vec[1] += 1
+    return vec
 
 def main():
-    win = GraphWin('Face', 200, 150) # give title and dimensions
-    win.yUp() # make right side up coordinates!
-
-    head = Circle(Point(40,100), 25) # set center and radius
-    head.setFill("yellow")
-    head.draw(win)
-
-    eye1 = Circle(Point(30, 105), 5)
-    eye1.setFill('blue')
-    eye1.draw(win)
-
-    eye2 = Line(Point(45, 105), Point(55, 105)) # set endpoints
-    eye2.setWidth(3)
-    eye2.draw(win)
-
-    mouth = Oval(Point(30, 90), Point(50, 85)) # set corners of bounding box
-    mouth.setFill("red")
-    mouth.draw(win)
-
-    label = Text(Point(100, 120), 'A face')
-    label.draw(win)
-
-    message = Text(Point(win.getWidth()/2, 20), 'Click anywhere to quit.')
-    message.draw(win)
-    win.getMouse()
-    win.close()
+    time = perf_counter()
+    count = 50
+    for i in range(10):
+        t = []
+        for j in range(count):
+            t.append(threading.Thread(target=piCount))
+        for j in range(count):
+            t[j].start()
+        for j in range(count):
+            t[j].join()
+        temp = vec[0]/vec[1]
+        print("pi: ", temp)
+        print("%pi: ", (pi/temp)*100)
+        print("time: ",perf_counter() - time)
+        print(vec,"\n")
+        time = perf_counter()
 
 main()
