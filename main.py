@@ -31,6 +31,7 @@ def main():
             t[j].join()
         t.clear()
         temp = vec[0]/vec[1]
+        print("iteration     : ", i)
         print("pi calc       : ", temp)
         print("%pi           : ", (temp/pi)*100)
         print("total itration: ", vec[0] + vec[1])
