@@ -5,33 +5,37 @@ from time import *
 import threading
 vec = [0,0]
 
-def piCount():
-    for i in range(10000):
-        point = [randint(0,1000), randint(0,1000)]
+def piCount(size):
+    for i in range(100000):
+        point = [randint(-1*size,size), randint(-1*size,size)]
         
-        var = sqrt((point[0] - 500.0) ** 2 + (point[1] - 500.0) ** 2)
-        if(var <= 500.0):
+        var = sqrt((point[0]) ** 2 + (point[1]) ** 2)
+        if(var <= size):
             vec[0] += 1
         else:
             vec[1] += 1
-    return vec
 
 def main():
     time = perf_counter()
-    count = 50
-    for i in range(10):
+    threads = 100
+    iterations = 10
+    circleDiamiter = 1000000
+    print("~~~~~Working~~~~~")
+    for i in range(iterations):
         t = []
-        for j in range(count):
-            t.append(threading.Thread(target=piCount))
-        for j in range(count):
+        for j in range(threads):
+            t.append(threading.Thread(target=piCount, args=(circleDiamiter,)))
+        for j in range(threads):
             t[j].start()
-        for j in range(count):
+        for j in range(threads):
             t[j].join()
+        t.clear()
         temp = vec[0]/vec[1]
-        print("pi: ", temp)
-        print("%pi: ", (pi/temp)*100)
-        print("time: ",perf_counter() - time)
-        print(vec,"\n")
+        print("pi calc       : ", temp)
+        print("%pi           : ", (temp/pi)*100)
+        print("total itration: ", vec[0] + vec[1])
+        print("time passed   : ", perf_counter() - time, "\n")
+
         time = perf_counter()
 
 main()
